@@ -1,5 +1,6 @@
 #!/bin/bash
 
+# OpenMediaVault 3.X Customization
 # arguments: $RELEASE $LINUXFAMILY $BOARD $BUILD_DESKTOP
 #
 # This is the image customization script
@@ -17,7 +18,7 @@ Main() {
 	case $RELEASE in
 		jessie)
 			# your code here
-			# InstallOpenMediaVault # uncomment to get an OMV 3 image
+			InstallOpenMediaVault
 			;;
 		xenial)
 			# your code here

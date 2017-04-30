@@ -39,6 +39,10 @@ MULTITHREAD=""				# build n images at once. For internal use.
 LIB_TAG=""				# empty for latest version,
 					# one of listed here: https://github.com/igorpecovnik/lib/tags for stable versions,
 					# or commit hash
+					
+#customizations
+CUSTOM=""
+
 #--------------------------------------------------------------------------------------------------------------------------------
 
 # source is where compile.sh is located
@@ -99,4 +103,4 @@ fi
 
 # If you are committing new version of this file, increment VERSION
 # Only integers are supported
-# VERSION=25
+# VERSION=26

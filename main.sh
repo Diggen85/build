@@ -180,6 +180,20 @@ if [[ $KERNEL_ONLY != yes && -z $RELEASE ]]; then
 	[[ -z $RELEASE ]] && exit_with_error "No release selected"
 fi
 
+if [[ -z $CUSTOM || $CUSTOM != none ]]; then
+	if [[ $KERNEL_ONLY != yes && -z $CUSTOM ]]; then
+		options=("none" "None customized Image")
+		for custom in $SRC/lib/config/customizations/*-chroot.sh; do
+			options+=("$(basename $custom | cut -d'-' -f1)" "$(sed -n '3p' $custom | cut -d'#' -f2)")
+		done
+		CUSTOM=$(dialog --stdout --title "Choose a customization" --backtitle "$backtitle" --scrollbar --menu "Select the target Customization" \
+			$TTY_Y $TTY_X $(($TTY_Y - 8)) "${options[@]}")
+		[[ -z $CUSTOM ]] && exit_with_error "No customization selected"
+	fi
+fi
+
+
+
 if [[ $KERNEL_ONLY != yes && -z $BUILD_DESKTOP ]]; then
 	options=()
 	options+=("no" "Image with console interface (server)")

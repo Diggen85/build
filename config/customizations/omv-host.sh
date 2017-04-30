@@ -1,0 +1,31 @@
+#!/bin/bash
+
+# arguments: $RELEASE $LINUXFAMILY $BOARD $BUILD_DESKTOP
+#
+# This is the image customization script
+#
+# NOTE: It is copied to /tmp directory inside the image
+# and executed there inside chroot environment
+# so don't reference any files that are not already installed
+
+RELEASE=$1
+LINUXFAMILY=$2
+BOARD=$3
+BUILD_DESKTOP=$4
+
+Main() {
+	case $RELEASE in
+		jessie)
+			# your code here
+			echo "No work here, for me"
+			;;
+		xenial)
+			# your code here
+			;;
+		stretch)
+			# your code here
+		;;
+	esac
+} # Main
+
+Main "$@"

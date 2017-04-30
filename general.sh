@@ -540,7 +540,7 @@ prepare_host()
 	test -e /proc/sys/fs/binfmt_misc/qemu-aarch64 || update-binfmts --enable qemu-aarch64
 
 	# create directory structure
-	mkdir -p $SOURCES $DEST/debs/extra $DEST/debug $CACHEDIR/rootfs $SRC/userpatches/overlay $SRC/toolchains
+	mkdir -p $SOURCES $DEST/debs/extra $DEST/debug $CACHEDIR/rootfs $SRC/toolchains
 	find $SRC/lib/patch -type d ! -name . | sed "s%lib/patch%userpatches%" | xargs mkdir -p
 
 	# download external Linaro compiler and missing special dependencies since they are needed for certain sources
@@ -571,8 +571,6 @@ prepare_host()
 			rm -rf $SRC/toolchains/$dir
 		fi
 	done
-
-	[[ ! -f $SRC/userpatches/customize-image.sh ]] && cp $SRC/lib/scripts/customize-image.sh.template $SRC/userpatches/customize-image.sh
 
 	if [[ ! -f $SRC/userpatches/README ]]; then
 		rm $SRC/userpatches/readme.txt

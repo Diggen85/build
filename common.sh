@@ -427,19 +427,21 @@ write_uboot()
 customize_image()
 {
 	# for users that need to prepare files at host
-	[[ -f $SRC/userpatches/customize-image-host.sh ]] && source $SRC/userpatches/customize-image-host.sh
-	cp $SRC/userpatches/customize-image.sh $CACHEDIR/$SDCARD/tmp/customize-image.sh
+	[[ -f $SRC/config/customizations/${CUSTOM}-host.sh ]] && source $SRC/config/customizations/${CUSTOM}-host.sh
+	cp $SRC/config/customizations/${CUSTOM}-chroot.sh $CACHEDIR/$SDCARD/tmp/customize-image.sh
 	chmod +x $CACHEDIR/$SDCARD/tmp/customize-image.sh
-	mkdir -p $CACHEDIR/$SDCARD/tmp/overlay
-	if [[ $(lsb_release -sc) == xenial ]]; then
-		# util-linux >= 2.27 required
-		mount -o bind,ro $SRC/userpatches/overlay $CACHEDIR/$SDCARD/tmp/overlay
-	else
-		mount -o bind $SRC/userpatches/overlay $CACHEDIR/$SDCARD/tmp/overlay
+	if [[ -d $SRC/config/customizations/${CUSTOM}-overlay/ ]]; then
+		mkdir -p $CACHEDIR/$SDCARD/tmp/overlay
+		if [[ $(lsb_release -sc) == xenial ]]; then
+			# util-linux >= 2.27 required
+			mount -o bind,ro $SRC/config/customizations/$CUSTOM $CACHEDIR/$SDCARD/tmp/overlay
+		else
+			mount -o bind $SRC/config/customizations/$CUSTOM $CACHEDIR/$SDCARD/tmp/overlay
+		fi
 	fi
-	display_alert "Calling image customization script" "customize-image.sh" "info"
+	display_alert "Calling image customization script" "$CUSTOM" "info"
 	chroot $CACHEDIR/$SDCARD /bin/bash -c "/tmp/customize-image.sh $RELEASE $LINUXFAMILY $BOARD $BUILD_DESKTOP"
-	umount $CACHEDIR/$SDCARD/tmp/overlay
+	[[ -d $SRC/config/customizations/${CUSTOM}-overlay/ ]] && umount $CACHEDIR/$SDCARD/tmp/overlay
 	mountpoint -q $CACHEDIR/$SDCARD/tmp/overlay || rm -r $CACHEDIR/$SDCARD/tmp/overlay
 }
 

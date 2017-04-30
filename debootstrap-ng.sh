@@ -22,7 +22,7 @@
 #
 debootstrap_ng()
 {
-	display_alert "Starting rootfs and image building process for" "$BOARD $RELEASE" "info"
+	display_alert "Starting rootfs and image building process for" "$BOARD $RELEASE $CUSTOM" "info"
 
 	[[ $ROOTFS_TYPE != ext4 ]] && display_alert "Assuming $BOARD $BRANCH kernel supports $ROOTFS_TYPE" "" "wrn"
 
@@ -75,7 +75,7 @@ debootstrap_ng()
 
 	# stage: user customization script
 	# NOTE: installing too many packages may fill tmpfs mount
-	customize_image
+	[[ $CUSTOM != none ]] && customize_image
 
 	# clean up / prepare for making the image
 	umount_chroot "$CACHEDIR/$SDCARD"
@@ -436,7 +436,9 @@ create_image()
 	local version="Armbian_${REVISION}_${BOARD^}_${DISTRIBUTION}_${RELEASE}_${BRANCH}_${VER/-$LINUXFAMILY/}"
 	[[ $BUILD_DESKTOP == yes ]] && version=${version}_desktop
 	[[ $ROOTFS_TYPE == nfs ]] && version=${version}_nfsboot
-
+	[[ $CUSTOM != none ]] && version=${version}_$CUSTOM
+	
+	
 	if [[ $ROOTFS_TYPE != nfs ]]; then
 		display_alert "Copying files to image" "${SDCARD}.raw" "info"
 		rsync -aHWXh --exclude="/boot/*" --exclude="/dev/*" --exclude="/proc/*" --exclude="/run/*" --exclude="/tmp/*" \
